@@ -1,0 +1,210 @@
+"""
+Created on Mon Feb 25 21:05:25 2019
+
+@author: Gerardo Armenta
+Lab 2
+"""
+
+class Node(object):
+    def __init__(self, data, next = None):
+        self.data = data
+        self.next = next
+
+class List(object):
+    def __init__(self):
+        self.head = None
+        self.tail = None
+
+# Adds an item to a node and creates a linked list
+def Append(L, item):
+    if (L.head == None):
+        L.head = Node(item)
+        L.tail = L.head
+
+    else:
+        L.tail.next = Node(item)
+        L.tail = L.tail.next
+
+# Copies an existing linked list
+def Copy(L):
+    new = List()
+    temp = L.head
+    while temp is not None:
+        Append(new, temp.data)
+        temp = temp.next
+    return new
+
+# Checks if a list is empty or not
+def IsEmpty(C):
+    return C.head == None
+
+# Returns the size of a linked list
+def GetLength(C):
+    temp = C.head
+    count = 0
+    while temp is not None:
+        count += 1
+        temp = temp.next
+    return count
+
+# Items for a linked list are compared and bubble sorted    
+def BubbleSort(C):
+    global bubblecount  # for use on testing
+    complete = False
+    while not complete:
+        complete = True
+        temp = C.head
+        while temp.next is not None:
+            if temp.data > temp.next.data:
+                buffer = temp.data
+                temp.data = temp.next.data
+                temp.next.data = buffer
+                complete = False
+            bubblecount += 1
+            temp = temp.next
+
+# Items for a linked list are compared and merge sorted
+def MergeSort(C):
+    size = GetLength(C)
+    if IsEmpty(C) or size == 1:
+        return C    
+    temp = C.head
+    L1 = List()
+    L2 = List()
+    mid = size // 2  
+    for i in range(mid):
+        Append(L1, temp.data)
+        temp = temp.next
+    while temp is not None:
+        Append(L2, temp.data)
+        temp = temp.next
+    L1 = MergeSort(L1)
+    L2 = MergeSort(L2)
+    L = Merge(L1, L2)
+    return L
+   
+# Combines the lists created by MergeSort
+def Merge(L1, L2):
+    global mergecount  # for use on testing
+    combined = List()
+    temp = L1.head
+    buffer = L2.head
+    while temp is not None and buffer is not None:
+        if temp.data > buffer.data:
+            mergecount += 1
+            Append(combined, buffer.data)
+            buffer = buffer.next
+        else:
+            mergecount += 1
+            Append(combined, temp.data)
+            temp = temp.next
+    if temp == None:
+        while buffer is not None:
+            Append(combined, buffer.data)
+            buffer = buffer.next
+    if buffer == None:
+        while temp is not None:
+            Append(combined, temp.data)
+            temp = temp.next
+    return combined
+
+# Items for a linked list are compared and quick sorted
+def QuickSort(L):
+    global quickcount  # for use on testing
+    L1 = List()
+    L2 = List()
+    if IsEmpty(L) or GetLength(L) == 1:
+        return L
+    buffer = L.head
+    temp = L.head.next
+    while temp != None:
+        if temp.data < buffer.data:
+            Append(L1, temp.data)
+        else:
+            Append(L2, temp.data)
+        quickcount += 1
+        temp = temp.next 
+    L1 = QuickSort(L1)
+    L2 = QuickSort(L2)
+    L = QuickSortMerge(L1, L2, buffer)
+    return L
+
+# Combines the lists created by QuickSort
+def QuickSortMerge(L1, L2, buffer):
+    comb = List()
+    temp = L1.head
+    temp2 = L2.head
+    while temp is not None:
+        Append(comb, temp.data)
+        temp = temp.next 
+    Append(comb, buffer.data)
+    while temp2 is not None:
+        Append(comb, temp2.data)
+        temp2 = temp2.next 
+    return comb
+
+# Returns the item of a linked list in location d 
+def ElementAt(C, d):
+    temp = C.head
+    while d != 0:
+        temp = temp.next
+        d -= 1
+    return temp.data
+
+# Returns the median from a sorted linked list          
+def Median(L):
+    C = Copy(L)
+    # for merge sort change to C = MergeSort(C) // for bubble sort change to BubbleSort(C)
+    C = QuickSort(C)   
+    return ElementAt(C,GetLength(C)//2)
+
+# Prints the items of a linked list
+def Print(L):
+    temp = L.head
+    while temp is not None:
+        print(temp.data, end=' ')
+        temp = temp.next
+    print()
+
+L = List()
+
+# This are counts for how many comparisons are done within each sorting type
+bubblecount = 0
+mergecount = 0
+quickcount = 0
+
+# The following integers are added to the list
+Append(L, 2)
+Append(L, 5)
+Append(L, 3)
+Append(L, 4)
+Append(L, 6)
+
+
+Print(L)
+print()
+ans = Median(L)
+print('The median is: ' , ans)
+
+
+# Test for sorting comparisons
+A = Copy(L)
+B = Copy(L)
+C = Copy(L)
+
+BubbleSort(A)
+B = MergeSort(B)
+C = QuickSort(C)
+
+print()
+print('Bubble Sort list: ')
+Print(A)
+print('Number of comparisons = ' , bubblecount)
+print()
+print('Merge Sort list: ')
+Print(B)
+print('Number of comparisons = ' , mergecount)
+print()
+print('Quick sort list: ')
+Print(C)
+print('Number of comparisons = ' , quickcount)
