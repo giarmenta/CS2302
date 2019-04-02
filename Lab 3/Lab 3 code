@@ -1,0 +1,176 @@
+"""
+Gerardo Armenta
+Lab 3
+Date: 3/8/2019
+"""
+
+# Code to implement a binary search tree
+# Programmed by Olac Fuentes
+# Last modified February 27, 2019
+
+class BST(object):
+    # Constructor
+    def __init__(self, item, left=None, right=None):
+        self.item = item
+        self.left = left
+        self.right = right
+
+def Insert(T ,newItem) :
+    if T == None:
+        T = BST(newItem)
+    elif T.item > newItem:
+        T.left = Insert(T.left ,newItem)
+    else:
+        T.right = Insert(T.right ,newItem)
+    return T
+
+def bstInsert(A):
+    if not A:
+        return None
+    mid = len(A)//2
+    T = BST(A[mid])
+    T.left = bstInsert(A[:mid])
+    T.right = bstInsert(A[mid+1:])
+
+    return T
+
+def Delete(T ,del_item):
+    if T is not None:
+        if del_item < T.item:
+            T.left = Delete(T.left ,del_item)
+        elif del_item > T.item:
+            T.right = Delete(T.right ,del_item)
+        else:  # del_item == T.item
+            if T.left is None and T.right is None: # T is a leaf, just remove it
+                T = None
+            elif T.left is None: # T has one child, replace it by existing child
+                T = T.right
+            elif T.right is None:
+                T = T.left
+            else: # T has two chldren. Replace T by its successor, delete successor
+                m = Smallest(T.right)
+                T.item = m.item
+                T.right = Delete(T.right ,m.item)
+    return T
+
+def InOrder(T):
+    # Prints items in BST in ascending order
+    if T is not None:
+        InOrder(T.left)
+        print(T.item ,end = ' ')
+        InOrder(T.right)
+
+def InOrderD(T ,space):
+    # Prints items and structure of BST
+    if T is not None:
+        InOrderD(T.right ,space +'   ')
+        print(space ,T.item)
+        InOrderD(T.left ,space +'   ')
+
+def SmallestL(T):
+    # Returns smallest item in BST. Returns None if T is None
+    if T is None:
+        return None
+    while T.left is not None:
+        T = T.left
+    return T
+
+def Smallest(T):
+    # Returns smallest item in BST. Error if T is None
+    if T.left is None:
+        return T
+    else:
+        return Smallest(T.left)
+
+def Largest(T):
+    if T.right is None:
+        return T
+    else:
+        return Largest(T.right)
+
+def Find(T ,k):
+    # Returns the address of k in BST, or None if k is not in the tree
+    if T is None or T.item == k:
+        return T
+    if T.item <k:
+        return Find(T.right ,k)
+    return Find(T.left ,k)
+
+def FindAndPrint(T ,k):
+    f = Find(T ,k)
+    if f is not None:
+        print(f.item ,'found')
+    else:
+        print(k ,'not found')
+
+def IterativeSearch(R, k):  # Iterative version of the search operation
+    while R is not None:
+        if k > R.item:
+            R = R.right
+        elif k < R.item:
+            R = R.left
+        else:
+            return True
+    return False
+
+def BSTToList(T, list):  # Extracts elements in a binary tree to a sorted list
+    if T is not None:
+        BSTToList(T.left, list)
+        list.append(T.item)
+        BSTToList(T.right, list)
+    return list    
+
+# Code to test the functions above
+T = None
+A = [10, 4, 15, 2, 8, 12, 18, 1, 3, 5, 9, 7]
+
+for a in A:
+    T = Insert(T ,a)
+
+A.sort()
+
+T = bstInsert(A)
+
+InOrderD(T, '')
+
+list = []
+list = BSTToList(T, list)  # Returns the list created from the binary tree
+print()
+print(list)
+print(IterativeSearch(T, 99))  # Searches for the desired integer and return true or false
+
+
+'''
+InOrder(T)
+print()
+InOrderD(T ,'')
+print()
+
+print(SmallestL(T).item)
+print(Smallest(T).item)
+
+FindAndPrint(T ,40)
+FindAndPrint(T ,110)
+
+n=60
+print('Delete',n ,' Case 1, deleted node is a leaf')
+T = Delete(T,n )  # Case 1, deleted node is a leaf
+InOrderD(T,' ')
+print('####################################')
+
+n= 90
+print('Delete',n ,' Case 2, deleted node has one child')
+T = Delete(T,n )  # Case 2, deleted node has one child
+InOrderD(T,' ')
+print('####################################')
+
+n= 70
+print('Delete',n ,' Case 3, deleted node has two children')
+T = Delete(T,n )  # Case 3, deleted node has two children
+InOrderD(T,' ')
+
+n= 40
+print('Delete',n ,' Case 3, deleted node has two children')
+T = Delete(T,n )  # Case 3, deleted node has two children
+InOrderD(T,' ')
+'''
