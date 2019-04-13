@@ -62,14 +62,14 @@ def Index(k, length):  # Returns the index
     return idx
 
 def EmptyListNum(H):  # Returns the number of empty lists
-    i = 0
+    c = 0
     m = H.count / len(H.item)
-    j = 0
-    for k in H.item:
-        j += len(k) - m
-        if i == []:
-            i += 1
-    return i, (1 / len(H.item)) * j
+    k = 0
+    for a in H.item:
+        k += len(a) - m
+        if a == []:  # [] found
+            c += 1
+    return c, (1 / len(H.item)) * k
 
 def Double(H):  # Doubles the size of the Hash Table's length
     H2 = HashTableC(2 * len(H.item) + 1)
@@ -97,19 +97,18 @@ def FindC(H, k):
 
 def bstmode():  # Runs if user input 1 for BST
     T = None
-    print("\nBuilding binary search tree.\n")
+    print('\nBuilding binary search tree.\n')
     start = int(time.time())
     with open('glove.6B.50d.txt', encoding='utf-8') as file:
         for l in file:
             line = l.split(' ')
             T = Insert(T, [line[0], np.array(line[1:]).astype(np.float)])
-    file.close()
     end = int(time.time())
-    print("Binary Search Tree stats:")
-    print("Number of nodes: ", NodeNum(T))
-    print("Height: ", Height(T))
-    print("Running time for binary search tree construction:", (end - start))
-    print("\nReading word file to determine similarities.\n")
+    print('Binary Search Tree stats:')
+    print('Number of nodes: ', NodeNum(T))
+    print('Height: ', Height(T))
+    print('Running time for binary search tree construction: ', (end - start))
+    print('\nReading word file to determine similarities.\n ')
     start = int(time.time())
     # reads words from wordlist.txt to find the similarity between both
     with open('wordlist.txt', encoding='utf-8') as file2:
@@ -118,15 +117,13 @@ def bstmode():  # Runs if user input 1 for BST
             line2 = l2.split()
             e0 = Find(T, line2[0])
             e1 = Find(T, line2[1])
-            print("Similarity", line2[0:2], " = ", round(np.sum(e0 * e1) / (math.sqrt
-                  (np.sum(e0 * e0)) * math.sqrt(np.sum(e1 * e1))), 4))
-    file2.close()
+            print('Similarity', line2[0:2], ' = ', round(np.sum(e0 * e1) / (math.sqrt(np.sum(e0 * e0)) * math.sqrt(np.sum(e1 * e1))), 4))
     end = int(time.time())
-    print("\nRunning time for binary search tree query processing: ", (end - start))
+    print('\nRunning time for binary search tree query processing: ', (end - start))
 
 def hashmode():  # Runs if user input 2 for Hash Table
     H = HashTableC(10)  # creates Hash Table 
-    a, b = EmptyListNum(H)
+    c, d = EmptyListNum(H)
     print('\nBuilding Hash Table with Chaining\n')
     print('Hash Table stats:')
     print('Initial table size: ', len(H.item))
@@ -140,10 +137,10 @@ def hashmode():  # Runs if user input 2 for Hash Table
     end = int(time.time())
     print('Final table size: ', len(H.item))
     print('Load Factor: ', H.count / len(H.item) * 100)
-    print('Percentage of empty lists: ', a / len(H.item) * 100)
-    print("Standard deviation of the lengths of the lists:", b)
-    print("Running time for Hash Table construction:", (end - start))
-    print("\nReading word file to determine similarities.\n")
+    print('Percentage of empty lists: ', c / len(H.item) * 100)
+    print('Standard deviation of the lengths of the lists: ', d)
+    print('Running time for Hash Table construction: ', (end - start))
+    print('\nReading word file to determine similarities.\n')
     start = int(time.time())
     # reads words from wordlist.txt to find the similarity between both
     with open('wordlist.txt', encoding = 'utf-8') as file2:
@@ -152,11 +149,10 @@ def hashmode():  # Runs if user input 2 for Hash Table
             line2 = l.split()
             e0 = FindC(H, line2[0])
             e1 = FindC(H, line2[1])
-            print("Similarity", line2[0:2], " = ", round(np.sum(e0 * e1) / (math.sqrt
-                  (np.sum(e0 * e0)) * math.sqrt(np.sum(e1 * e1))), 4))
+            print('Similarity ', line2[0:2], ' = ', round(np.sum(e0 * e1) / (math.sqrt(np.sum(e0 * e0)) * math.sqrt(np.sum(e1 * e1))), 4))
     file2.close()
     end = int(time.time())
-    print("\nRunning time for hash table query processing: ", (end - start))
+    print('\nRunning time for hash table query processing: ', (end - start))
       
 print('Choose table implementation')
 ans = int(input('Type 1 for binary search tree or 2 for hash table with chaining '))
