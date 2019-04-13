@@ -62,14 +62,14 @@ def Index(k, length):  # Returns the index
     return idx
 
 def EmptyListNum(H):  # Returns the number of empty lists
-    c = 0
+    i = 0
     m = H.count / len(H.item)
-    k = 0
-    for a in H.item:
-        k += len(a) - m
-        if a == []:  # [] found
-            c += 1
-    return c, (1 / len(H.item)) * k
+    j = 0
+    for k in H.item:
+        j += len(k) - m
+        if i == []:
+            i += 1
+    return i, (1 / len(H.item)) * j
 
 def Double(H):  # Doubles the size of the Hash Table's length
     H2 = HashTableC(2 * len(H.item) + 1)
@@ -103,6 +103,7 @@ def bstmode():  # Runs if user input 1 for BST
         for l in file:
             line = l.split(' ')
             T = Insert(T, [line[0], np.array(line[1:]).astype(np.float)])
+    file.close()
     end = int(time.time())
     print("Binary Search Tree stats:")
     print("Number of nodes: ", NodeNum(T))
@@ -117,13 +118,15 @@ def bstmode():  # Runs if user input 1 for BST
             line2 = l2.split()
             e0 = Find(T, line2[0])
             e1 = Find(T, line2[1])
-            print("Similarity", line2[0:2], " = ", round(np.sum(e0 * e1) / (math.sqrt(np.sum(e0 * e0)) * math.sqrt(np.sum(e1 * e1))), 4))
+            print("Similarity", line2[0:2], " = ", round(np.sum(e0 * e1) / (math.sqrt
+                  (np.sum(e0 * e0)) * math.sqrt(np.sum(e1 * e1))), 4))
+    file2.close()
     end = int(time.time())
     print("\nRunning time for binary search tree query processing: ", (end - start))
 
 def hashmode():  # Runs if user input 2 for Hash Table
     H = HashTableC(10)  # creates Hash Table 
-    c, d = EmptyListNum(H)
+    a, b = EmptyListNum(H)
     print('\nBuilding Hash Table with Chaining\n')
     print('Hash Table stats:')
     print('Initial table size: ', len(H.item))
@@ -137,8 +140,8 @@ def hashmode():  # Runs if user input 2 for Hash Table
     end = int(time.time())
     print('Final table size: ', len(H.item))
     print('Load Factor: ', H.count / len(H.item) * 100)
-    print('Percentage of empty lists: ', c / len(H.item) * 100)
-    print("Standard deviation of the lengths of the lists:", d)
+    print('Percentage of empty lists: ', a / len(H.item) * 100)
+    print("Standard deviation of the lengths of the lists:", b)
     print("Running time for Hash Table construction:", (end - start))
     print("\nReading word file to determine similarities.\n")
     start = int(time.time())
@@ -149,7 +152,8 @@ def hashmode():  # Runs if user input 2 for Hash Table
             line2 = l.split()
             e0 = FindC(H, line2[0])
             e1 = FindC(H, line2[1])
-            print("Similarity", line2[0:2], " = ", round(np.sum(e0 * e1) / (math.sqrt(np.sum(e0 * e0)) * math.sqrt(np.sum(e1 * e1))), 4))
+            print("Similarity", line2[0:2], " = ", round(np.sum(e0 * e1) / (math.sqrt
+                  (np.sum(e0 * e0)) * math.sqrt(np.sum(e1 * e1))), 4))
     file2.close()
     end = int(time.time())
     print("\nRunning time for hash table query processing: ", (end - start))
