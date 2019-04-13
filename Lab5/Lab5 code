@@ -8,9 +8,6 @@ import math
 import numpy as np
 import time
 
-# Code to implement a binary search tree
-# Programmed by Olac Fuentes
-# Last modified February 27, 2019
 
 class BST(object):
     # Constructor
@@ -113,7 +110,9 @@ def bstmode():  # Runs if user input 1 for BST
     print("Running time for binary search tree construction:", (end - start))
     print("\nReading word file to determine similarities.\n")
     start = int(time.time())
+    # reads words from wordlist.txt to find the similarity between both
     with open('wordlist.txt', encoding='utf-8') as file2:
+        print('Word Similarities found:')
         for l2 in file2:
             line2 = l2.split()
             e0 = Find(T, line2[0])
@@ -128,14 +127,14 @@ def hashmode():  # Runs if user input 2 for Hash Table
     print('\nBuilding Hash Table with Chaining\n')
     print('Hash Table stats:')
     print('Initial table size: ', len(H.item))
-    start = int(time.time())  # starts timer
+    start = int(time.time())
     # populates the Hash Table from glove.txt file
     with open('glove.6B.50d.txt', encoding = 'utf-8') as file:
         for l in file:
             line = l.split()
             H = InsertC(H, line)
     file.close()
-    end = int(time.time())  # ends timer
+    end = int(time.time())
     print('Final table size: ', len(H.item))
     print('Load Factor: ', H.count / len(H.item) * 100)
     print('Percentage of empty lists: ', c / len(H.item) * 100)
@@ -143,14 +142,16 @@ def hashmode():  # Runs if user input 2 for Hash Table
     print("Running time for Hash Table construction:", (end - start))
     print("\nReading word file to determine similarities.\n")
     start = int(time.time())
+    # reads words from wordlist.txt to find the similarity between both
     with open('wordlist.txt', encoding = 'utf-8') as file2:
+        print('Word Similarities found:')
         for l in file2:
             line2 = l.split()
             e0 = FindC(H, line2[0])
             e1 = FindC(H, line2[1])
             print("Similarity", line2[0:2], " = ", round(np.sum(e0 * e1) / (math.sqrt(np.sum(e0 * e0)) * math.sqrt(np.sum(e1 * e1))), 4))
     file2.close()
-    end = int(time.time())  # ending time
+    end = int(time.time())
     print("\nRunning time for hash table query processing: ", (end - start))
       
 print('Choose table implementation')
