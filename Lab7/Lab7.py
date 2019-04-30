@@ -8,7 +8,7 @@ TA: Anindita Nath, Maliheh Zargaran, Erik Macik, Eduardo Lara
 Purpose:To use the previous lab 6 and create a maze that asks the user to select the number of walls they want removed
         and then create an adjacency list of each pathcreated from each wall removal. Then implement breadth first search,
         depth first search and depth first search using recursion. Finally create a path from start, cell 0, to goal, top
-        left corner.
+        right corner.
 """
 
 import matplotlib.pyplot as plt
