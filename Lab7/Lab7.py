@@ -152,24 +152,6 @@ def path(plot, previous, vertex, x, y) :
             y1 = y
             path(plot, previous, previous[vertex], x1, y1)
             plot.plot([x1, x],[y1, y], linewidth = 2, color = 'r')
-
-def draw_graph(G):
-    fig, ax = plt.subplots()
-    n = len(G)
-    r = 30
-    coords =[]
-    for i in range(n):
-        theta = 2*math.pi*i/n+.001 # Add small constant to avoid drawing horizontal lines, which matplotlib doesn't do very well
-        coords.append([-r*np.cos(theta),r*np.sin(theta)])
-    for i in range(n):
-        for dest in G[i]:
-            ax.plot([coords[i][0],coords[dest][0]],[coords[i][1],coords[dest][1]],
-                     linewidth=1,color='k')
-    for i in range(n):
-        ax.text(coords[i][0],coords[i][1],str(i), size=10,ha="center", va="center",
-         bbox=dict(facecolor='w',boxstyle="circle"))
-    ax.set_aspect(1.0)
-    ax.axis('off')
     
 # Traverses adjacency list using depth-first search
 def depth_first_search(G):
